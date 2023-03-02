@@ -1,4 +1,4 @@
-const API_PRODUCTION_URL = "http://localhost:8080";
+const API_PRODUCTION_URL = "https://open-radio-api.herokuapp.com:8080";
 const API_DEV_URL = "http://localhost:4000";
 
 export const Config = {
