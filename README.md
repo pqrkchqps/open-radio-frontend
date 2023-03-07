@@ -1,6 +1,6 @@
-# Orca Frontend
+# Open-Radio.Net Frontend
 
-Orca Frontend built with the [React](https://reactjs.org) framework [Next.js](https://nextjs.org).
+Open-Radio.Net Frontend built with the [React](https://reactjs.org) framework [Next.js](https://nextjs.org).
 
 ### Running the app in development mode
 
