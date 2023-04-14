@@ -1,12 +1,12 @@
-import { FC, ReactNode, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addUserNotification, removeUserNotification } from '../../store/auth';
-import { RootState } from '../../store';
-import { Events } from '../../constants';
+import { FC, ReactNode, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addUserNotification, removeUserNotification } from "../../store/auth";
+import { RootState } from "../../store";
+import { Events } from "../../constants";
 
-import { Alert, GlobalStyle, Loading } from '../ui';
-import { useAuth, useFetchSettings, useSocket } from '../../utils';
-import { Theme } from '../../theme';
+import { Alert, GlobalStyle, Loading } from "../ui";
+import { useAuth, useFetchSettings, useSocket } from "../../utils";
+import { Theme } from "../../theme";
 
 interface AppProps {
   children: ReactNode;
@@ -48,20 +48,28 @@ const App: FC<AppProps> = ({ children, setTheme }) => {
     socket.on(Events.DELETE_NOTIFICATION_REQUEST, deleteNotificationListener);
 
     return () => {
-      socket.off(Events.CREATE_NOTIFICATION_REQUEST, createNotificationListener);
-      socket.off(Events.DELETE_NOTIFICATION_REQUEST, deleteNotificationListener);
+      socket.off(
+        Events.CREATE_NOTIFICATION_REQUEST,
+        createNotificationListener
+      );
+      socket.off(
+        Events.DELETE_NOTIFICATION_REQUEST,
+        deleteNotificationListener
+      );
     };
   }, [authUser, dispatch, socket]);
 
   if (isAuthFetching || isSettingsFetching) return <Loading top="md" />;
   if (authError) {
-    const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+    const isDevelopment =
+      !process.env.NODE_ENV || process.env.NODE_ENV === "development";
     if (isDevelopment) {
       console.error(authError);
     }
     const devErrorMessage =
-      'Sorry, something went wrong. Please open the browser console to view the detailed error message.';
-    const prodErrorMessage = "Sorry, something went wrong. We're working on getting this fixed as soon as we can.";
+      "Sorry, something went wrong. Please open the browser console to view the detailed error message.";
+    const prodErrorMessage =
+      "Sorry, something went wrong. We're working on getting this fixed as soon as we can.";
     return <div>{isDevelopment ? devErrorMessage : prodErrorMessage}</div>;
   }
 
@@ -72,7 +80,11 @@ const App: FC<AppProps> = ({ children, setTheme }) => {
       <GlobalStyle />
 
       {notification.message && (
-        <Alert autoClose={notification.autoClose} alignment={notification.alignment} type={notification.type}>
+        <Alert
+          autoClose={notification.autoClose}
+          alignment={notification.alignment}
+          type={notification.type}
+        >
           {notification.message}
         </Alert>
       )}

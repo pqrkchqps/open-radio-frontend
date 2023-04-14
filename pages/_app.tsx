@@ -11,6 +11,7 @@ import { Hydrate } from "react-query/hydration";
 import App from "../components/App";
 import { store } from "../store";
 import AuthPopup from "../components/Auth";
+import RouteGuard from "../components/RouteGuard";
 import currentTheme, { Theme } from "../theme";
 import { Config } from "../utils";
 
@@ -57,7 +58,9 @@ const NextApp: FC<AppProps> = ({
           <ReduxProvider store={store}>
             <ThemeProvider theme={theme || currentTheme}>
               <App setTheme={setTheme}>
-                <Component {...pageProps} />
+                <RouteGuard>
+                  <Component {...pageProps} />
+                </RouteGuard>
               </App>
               <AuthPopup />
             </ThemeProvider>

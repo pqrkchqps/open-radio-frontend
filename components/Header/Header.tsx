@@ -1,9 +1,16 @@
-import { useState, forwardRef, ForwardRefRenderFunction, useRef, RefObject, useEffect } from 'react';
-import Router from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
-import { useMutation } from 'react-query';
-import { useRouter } from 'next/router';
-import { updateNotificationSeen } from '../../pages/notifications';
+import {
+  useState,
+  forwardRef,
+  ForwardRefRenderFunction,
+  useRef,
+  RefObject,
+  useEffect,
+} from "react";
+import Router from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+import { useMutation } from "react-query";
+import { useRouter } from "next/router";
+import { updateNotificationSeen } from "../../pages/notifications";
 import {
   Root,
   Wrapper,
@@ -13,23 +20,30 @@ import {
   NotificationsAndAvatar,
   NotificationsCount,
   Logo,
-} from './style';
+} from "./style";
 
-import { MenuIcon, NotificationIcon } from '../ui/icons';
-import { Link, Button, Avatar, Spacing } from '../ui';
-import { openAuthPopup, cleanUserNotifications, PopupType } from '../../store/auth';
-import HeaderUser from './HeaderUser';
-import HeaderNotifications from './HeaderNotifications';
-import Search from '../Search';
-import { RootState } from '../../store';
-import { useBreakpoints } from '../../utils';
+import { MenuIcon, NotificationIcon } from "../ui/icons";
+import { Link, Button, Avatar, Spacing } from "../ui";
+import {
+  openAuthPopup,
+  cleanUserNotifications,
+  PopupType,
+} from "../../store/auth";
+import HeaderUser from "./HeaderUser";
+import HeaderNotifications from "./HeaderNotifications";
+import Search from "../Search";
+import { RootState } from "../../store";
+import { useBreakpoints } from "../../utils";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
   ref: RefObject<HTMLButtonElement>;
 }
 
-const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ toggleSidebar }, ref) => {
+const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = (
+  { toggleSidebar },
+  ref
+) => {
   const breakpoint = useBreakpoints();
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.auth.user);
@@ -39,10 +53,11 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
   const authUserRef = useRef(null);
   const notificationsRef = useRef(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [isNotificationsDropdownOpen, setIsNotificationsDropdownOpen] = useState(false);
+  const [isNotificationsDropdownOpen, setIsNotificationsDropdownOpen] =
+    useState(false);
 
   useEffect(() => {
-    Router.events.on('routeChangeComplete', () => {
+    Router.events.on("routeChangeComplete", () => {
       if (isUserDropdownOpen) {
         setIsUserDropdownOpen(false);
       }
@@ -57,7 +72,11 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
     setIsUserDropdownOpen(false);
     setIsNotificationsDropdownOpen(false);
 
-    if (isNotificationsDropdownOpen && authUser && authUser.notifications.length > 0) {
+    if (
+      isNotificationsDropdownOpen &&
+      authUser &&
+      authUser.notifications.length > 0
+    ) {
       dispatch(cleanUserNotifications());
       updateSeen();
     }
@@ -71,7 +90,7 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
     }
   };
 
-  const isSmallScreen = breakpoint === 'xs' || breakpoint === 'sm';
+  const isSmallScreen = breakpoint === "xs" || breakpoint === "sm";
 
   return (
     <Root>
@@ -87,14 +106,18 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
           </Logo>
           <Spacing left="sm" />
           <SearchContainer>
-            <Search
-              hideBorder
-              backgroundColor={5}
-              placeholder="Search for posts and members"
-              onItemClick={(item) =>
-                item.fullName ? router.push(`/profile/${item._id}`) : router.push(`/post/${item._id}`)
-              }
-            />
+            {authUser && (
+              <Search
+                hideBorder
+                backgroundColor={5}
+                placeholder="Search for posts and members"
+                onItemClick={(item) =>
+                  item.fullName
+                    ? router.push(`/profile/${item._id}`)
+                    : router.push(`/post/${item._id}`)
+                }
+              />
+            )}
           </SearchContainer>
         </Container>
 
@@ -106,7 +129,9 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
               <Spacing right="sm">
                 <Button ghost onClick={onNotificationIconClick}>
                   {authUser?.notifications.length > 0 && (
-                    <NotificationsCount>{authUser?.notifications.length}</NotificationsCount>
+                    <NotificationsCount>
+                      {authUser?.notifications.length}
+                    </NotificationsCount>
                   )}
                   <NotificationIcon />
                 </Button>
@@ -124,7 +149,10 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
 
           <div ref={authUserRef}>
             {authUser ? (
-              <Button ghost onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}>
+              <Button
+                ghost
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+              >
                 <Avatar image={authUser.image} />
               </Button>
             ) : (
@@ -134,7 +162,7 @@ const Header: ForwardRefRenderFunction<HTMLButtonElement, HeaderProps> = ({ togg
                 color="primary"
                 onClick={() => dispatch(openAuthPopup(PopupType.Log_In))}
               >
-                {isSmallScreen ? <Avatar /> : 'Log in'}
+                {isSmallScreen ? <Avatar /> : "Log in"}
               </Button>
             )}
             {isUserDropdownOpen && (

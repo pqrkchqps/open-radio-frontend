@@ -1,13 +1,19 @@
-import React, { FC, useState, FormEvent, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { closeAuthPopup, setAuthUser, PopupType, openAuthPopup, setToken } from '../../store/auth';
-import { Container, InputText, Button, Spacing, Text, LinkButton } from '../ui';
-import { RootState } from '../../store';
-import axios from 'axios';
-import { useMutation } from 'react-query';
-import { Config, Cookies, setCookie } from '../../utils';
-import { SocialButton, Or, Bottom } from './style';
-import { GithubIcon, GoogleIcon, FacebookIcon } from '../ui/icons';
+import React, { FC, useState, FormEvent, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  closeAuthPopup,
+  setAuthUser,
+  PopupType,
+  openAuthPopup,
+  setToken,
+} from "../../store/auth";
+import { Container, InputText, Button, Spacing, Text, LinkButton } from "../ui";
+import { RootState } from "../../store";
+import axios from "axios";
+import { useMutation } from "react-query";
+import { Config, Cookies, setCookie } from "../../utils";
+import { SocialButton, Or, Bottom } from "./style";
+import { GithubIcon, GoogleIcon, FacebookIcon } from "../ui/icons";
 
 interface User {
   email: string;
@@ -15,22 +21,23 @@ interface User {
 }
 
 const logIn = async (user: User) => {
-  const response = await axios.post('/login', user);
+  const response = await axios.post("/login", user);
   return response;
 };
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 };
 
 const Login: FC = () => {
-  const { isPopupOpen, popupType } = useSelector((state: RootState) => state.auth);
-  const { facebookLoginEnabled, githubLoginEnabled, googleLoginEnabled } = useSelector(
-    (state: RootState) => state.settings
+  const { isPopupOpen, popupType } = useSelector(
+    (state: RootState) => state.auth
   );
+  const { facebookLoginEnabled, githubLoginEnabled, googleLoginEnabled } =
+    useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const { mutateAsync: logInMutation } = useMutation(logIn);
   const [values, setValues] = useState(INITIAL_STATE);
 
@@ -41,7 +48,7 @@ const Login: FC = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMessage('');
+    setErrorMessage("");
     try {
       const {
         data: { token, user },
@@ -63,11 +70,11 @@ const Login: FC = () => {
 
   useEffect(() => {
     if (isPopupOpen) {
-      setErrorMessage('');
+      setErrorMessage("");
     }
 
     return () => {
-      setErrorMessage('');
+      setErrorMessage("");
       setValues(INITIAL_STATE);
     };
   }, [popupType, isPopupOpen]);
@@ -79,7 +86,8 @@ const Login: FC = () => {
           <>
             {facebookLoginEnabled && (
               <SocialButton href={`${Config.API_URL}/facebook`}>
-                <FacebookIcon color="facebook" /> Continue with Facebook <div></div>
+                <FacebookIcon color="facebook" /> Continue with Facebook{" "}
+                <div></div>
               </SocialButton>
             )}
 
@@ -99,9 +107,20 @@ const Login: FC = () => {
           </>
         )}
 
-        <InputText name="email" placeholder="Email" value={values.email} onChange={onChange} />
+        <InputText
+          name="email"
+          placeholder="Email"
+          value={values.email}
+          onChange={onChange}
+        />
         <Spacing bottom="xs" />
-        <InputText name="password" type="password" placeholder="Password" value={values.password} onChange={onChange} />
+        <InputText
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={values.password}
+          onChange={onChange}
+        />
         {errorMessage && (
           <Spacing top="sm">
             <Text color="error">{errorMessage}</Text>

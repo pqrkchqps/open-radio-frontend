@@ -1,18 +1,27 @@
-import { FC, Fragment } from 'react';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import Layout from '../components/Layout';
-import { useInfiniteScroll } from '../utils';
-import { DataLimit, Post } from '../constants';
-import { RootState } from '../store';
-import { PostCard, PostCreateButton } from '../components/Post';
-import { Container, Button, Spacing, LoadingDots, Skeleton, Text } from '../components/ui';
-import { openAuthPopup, PopupType } from '../store/auth';
-import { CommunityIcon } from '../components/ui/icons';
-import Seo from '../components/Seo';
+import { FC, Fragment } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import Layout from "../components/Layout";
+import { useInfiniteScroll } from "../utils";
+import { DataLimit, Post } from "../constants";
+import { RootState } from "../store";
+import { PostCard, PostCreateButton } from "../components/Post";
+import {
+  Container,
+  Button,
+  Spacing,
+  LoadingDots,
+  Skeleton,
+  Text,
+} from "../components/ui";
+import { CommunityIcon } from "../components/ui/icons";
+import Seo from "../components/Seo";
+import { PopupType, openAuthPopup } from "../store/auth";
 
 const fetchPostsByFollowing = async ({ pageParam = 0 }) => {
-  const { data } = await axios.get(`/posts/follow?offset=${pageParam}&limit=${DataLimit.PostsByFollowing}`);
+  const { data } = await axios.get(
+    `/posts/follow?offset=${pageParam}&limit=${DataLimit.PostsByFollowing}`
+  );
   return data;
 };
 
@@ -20,7 +29,7 @@ const Home: FC = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.auth.user);
   const { data, isFetching, isFetchingNextPage } = useInfiniteScroll({
-    key: 'postsByFollowing',
+    key: "postsByFollowing",
     apiCall: fetchPostsByFollowing,
     enabled: authUser !== null,
     dataLimit: DataLimit.PostsByFollowing,
@@ -57,7 +66,10 @@ const Home: FC = () => {
                 </Button>
               )}
               <Spacing top="sm">
-                <Text>{!authUser && 'And'} Follow community members to see their posts in the News Feed.</Text>
+                <Text>
+                  {!authUser && "And"} Follow community members to see their
+                  posts in the News Feed.
+                </Text>
               </Spacing>
             </Spacing>
           </Container>
@@ -67,7 +79,12 @@ const Home: FC = () => {
           return (
             <Fragment key={i}>
               {posts?.map((post: Post) => (
-                <PostCard displayChannelName queryKey="postsByFollowing" key={post._id} post={post} />
+                <PostCard
+                  displayChannelName
+                  queryKey="postsByFollowing"
+                  key={post._id}
+                  post={post}
+                />
               ))}
 
               {isFetchingNextPage && <LoadingDots />}
