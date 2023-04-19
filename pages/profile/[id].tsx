@@ -1,15 +1,22 @@
-import { FC, Fragment } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import Layout from '../../components/Layout';
-import Profile from '../../components/Profile';
-import { PostCard, PostCreateButton } from '../../components/Post';
-import { DataLimit, Post } from '../../constants';
-import { useInfiniteScroll } from '../../utils';
-import { Container, Empty, LoadingDots, Skeleton, Spacing, Text } from '../../components/ui';
-import Seo from '../../components/Seo';
-import { GetServerSideProps } from 'next';
+import { FC, Fragment } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import Layout from "../../components/Layout";
+import Profile from "../../components/Profile";
+import { PostCard, PostCreateButton } from "../../components/Post";
+import { DataLimit, Post } from "../../constants";
+import { useInfiniteScroll } from "../../utils";
+import {
+  Container,
+  Empty,
+  LoadingDots,
+  Skeleton,
+  Spacing,
+  Text,
+} from "../../components/ui";
+import Seo from "../../components/Seo";
+import { GetServerSideProps } from "next";
 
 const fetchUser = async ({ queryKey }) => {
   const [, id] = queryKey;
@@ -19,7 +26,9 @@ const fetchUser = async ({ queryKey }) => {
 
 const fetchPostsByAuthorId = async ({ queryKey, pageParam = 0 }) => {
   const [, authorId] = queryKey;
-  const { data } = await axios.get(`/posts/author/${authorId}?offset=${pageParam}&limit=${DataLimit.PostsByAuthorId}`);
+  const { data } = await axios.get(
+    `/posts/author/${authorId}?offset=${pageParam}&limit=${DataLimit.PostsByAuthorId}`
+  );
   return data;
 };
 
@@ -34,7 +43,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
     isFetchingNextPage: isFetchingNextPosts,
     refetch,
   } = useInfiniteScroll({
-    key: ['postsByAuthorId', user._id],
+    key: ["postsByAuthorId", user._id],
     apiCall: fetchPostsByAuthorId,
     dataLimit: DataLimit.PostsByAuthorId,
   });
@@ -58,10 +67,12 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
     <Layout marginTop="none" hideRightSidebar containerMaxWidth="xl">
       <>
         <Seo title={user.fullName} image={user.image} />
-        <Profile user={user} queryKey={['userById', user._id]} />
+        <Profile user={user} queryKey={["userById", user._id]} />
         <Spacing bottom="sm" />
         <Container maxWidth="sm">
-          {authUser && authUser._id === user._id && <PostCreateButton queryKey={['postsByAuthorId', user._id]} />}
+          {authUser && authUser._id === user._id && (
+            <PostCreateButton queryKey={["postsByAuthorId", user._id]} />
+          )}
 
           {isPostsLoading ? (
             <Skeleton height={300} count={6} bottom="sm" />
@@ -69,7 +80,9 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
             <>
               {isEmpty && (
                 <Container centered>
-                  <Text color="textSecondary">{user.fullName} has not posted yet.</Text>
+                  <Text color="textSecondary">
+                    {user.fullName} has not posted yet.
+                  </Text>
                 </Container>
               )}
 
@@ -80,7 +93,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
                       <PostCard
                         refetch={refetch}
                         displayChannelName
-                        queryKey={['postsByAuthorId', user._id]}
+                        queryKey={["postsByAuthorId", user._id]}
                         key={post._id}
                         post={post}
                       />
@@ -99,7 +112,7 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const user = await fetchUser({ queryKey: ['user', params.id] });
+  const user = await fetchUser({ queryKey: ["user", params.id] });
   return {
     props: {
       user,
