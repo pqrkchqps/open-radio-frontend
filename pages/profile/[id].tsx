@@ -6,7 +6,7 @@ import Layout from "../../components/Layout";
 import Profile from "../../components/Profile";
 import { PostCard, PostCreateButton } from "../../components/Post";
 import { DataLimit, Post } from "../../constants";
-import { useInfiniteScroll } from "../../utils";
+import { Cookies, getCookie, useInfiniteScroll } from "../../utils";
 import {
   Container,
   Empty,
@@ -18,10 +18,15 @@ import {
 import Seo from "../../components/Seo";
 import { GetServerSideProps } from "next";
 
-const fetchUser = async ({ queryKey }) => {
-  const [, id] = queryKey;
-  const { data } = await axios.get(`/users/${id}`);
-  return data;
+const fetchUser = (token: string) => {
+  return async ({ queryKey }) => {
+    const [, id] = queryKey;
+
+    const { data } = await axios.get(`/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  };
 };
 
 const fetchPostsByAuthorId = async ({ queryKey, pageParam = 0 }) => {
@@ -111,8 +116,12 @@ const ProfilePage: FC<ProfilePageProps> = ({ user }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const user = await fetchUser({ queryKey: ["user", params.id] });
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  req,
+}) => {
+  const token = getCookie(Cookies.Token, req.headers.cookie);
+  const user = await fetchUser(token)({ queryKey: ["user", params.id] });
   return {
     props: {
       user,

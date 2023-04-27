@@ -1,16 +1,21 @@
-import { FC } from 'react';
-import axios from 'axios';
-import Layout from '../../components/Layout';
-import { PostCard } from '../../components/Post';
-import { Container } from '../../components/ui';
-import Seo from '../../components/Seo';
-import { GetServerSideProps } from 'next';
-import { useQuery } from 'react-query';
+import { FC } from "react";
+import axios from "axios";
+import Layout from "../../components/Layout";
+import { PostCard } from "../../components/Post";
+import { Container } from "../../components/ui";
+import Seo from "../../components/Seo";
+import { GetServerSideProps } from "next";
+import { useQuery } from "react-query";
+import { Cookies, getCookie } from "../../utils";
 
-const fetchPost = async ({ queryKey }) => {
-  const [, postId] = queryKey;
-  const { data } = await axios.get(`/posts/${postId}`);
-  return data;
+const fetchPost = (token: string) => {
+  return async ({ queryKey }) => {
+    const [, postId] = queryKey;
+    const { data } = await axios.get(`/posts/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  };
 };
 
 interface ProfilePageProps {
@@ -18,7 +23,11 @@ interface ProfilePageProps {
 }
 
 const PostPage: FC<ProfilePageProps> = ({ post }) => {
-  const { data, refetch } = useQuery(['post', post._id], fetchPost, { initialData: post });
+  const token = getCookie(Cookies.Token);
+
+  const { data, refetch } = useQuery(["post", post._id], fetchPost(token), {
+    initialData: post,
+  });
 
   return (
     <Layout hideRightSidebar marginTop="none">
@@ -30,7 +39,7 @@ const PostPage: FC<ProfilePageProps> = ({ post }) => {
           disableNavigation
           isCommentsOpen
           displayChannelName
-          queryKey={['post', data._id]}
+          queryKey={["post", data._id]}
           post={data}
         />
       </Container>
@@ -38,8 +47,12 @@ const PostPage: FC<ProfilePageProps> = ({ post }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = await fetchPost({ queryKey: ['post', params.id] });
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  req,
+}) => {
+  const token = getCookie(Cookies.Token, req.headers.cookie);
+  const post = await fetchPost(token)({ queryKey: ["post", params.id] });
   return {
     props: {
       post,

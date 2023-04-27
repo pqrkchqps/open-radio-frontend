@@ -9,9 +9,12 @@ export const setCookie = (name: string, value: string, days = 360): void => {
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 };
 
-export const getCookie = (cname: string): string => {
+export const getCookie = (
+  cname: string,
+  cookie: string = document.cookie
+): string => {
   const name = cname + "=";
-  const ca = document.cookie.split(";");
+  const ca = cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
     while (c.charAt(0) === " ") {
