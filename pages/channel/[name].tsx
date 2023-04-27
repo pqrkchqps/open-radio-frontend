@@ -122,9 +122,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   req,
 }) => {
-  const token = getCookie(Cookies.Token, req.headers.cookie);
-  const channel = await fetchChannelByName(token)(params.name as string);
-  return { props: { channel: channel } };
+  if (req.headers.cookie) {
+    const token = getCookie(Cookies.Token, req.headers.cookie);
+    const channel = await fetchChannelByName(token)(params.name as string);
+    return { props: { channel: channel } };
+  } else return { props: {} };
 };
 
 export default Channel;

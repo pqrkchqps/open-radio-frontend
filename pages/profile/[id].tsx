@@ -120,13 +120,15 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   req,
 }) => {
-  const token = getCookie(Cookies.Token, req.headers.cookie);
-  const user = await fetchUser(token)({ queryKey: ["user", params.id] });
-  return {
-    props: {
-      user,
-    },
-  };
+  if (req.headers.cookie) {
+    const token = getCookie(Cookies.Token, req.headers.cookie);
+    const user = await fetchUser(token)({ queryKey: ["user", params.id] });
+    return {
+      props: {
+        user,
+      },
+    };
+  } else return { props: {} };
 };
 
 export default ProfilePage;

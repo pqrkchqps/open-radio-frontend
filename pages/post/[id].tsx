@@ -51,13 +51,15 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   req,
 }) => {
-  const token = getCookie(Cookies.Token, req.headers.cookie);
-  const post = await fetchPost(token)({ queryKey: ["post", params.id] });
-  return {
-    props: {
-      post,
-    },
-  };
+  if (req.headers.cookie) {
+    const token = getCookie(Cookies.Token, req.headers.cookie);
+    const post = await fetchPost(token)({ queryKey: ["post", params.id] });
+    return {
+      props: {
+        post,
+      },
+    };
+  } else return { props: {} };
 };
 
 export default PostPage;
