@@ -35,7 +35,6 @@ function RouteGuard({ children }) {
     const publicPaths = ["/login"];
     const urlSplit = url.split("?");
     const path = urlSplit[0];
-    console.log("auth", authUser);
     if (!authUser && !publicPaths.includes(path)) {
       setAuthorized(false);
       router.push({
