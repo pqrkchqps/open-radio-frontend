@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import type { AppProps } from "next/app";
 import axios from "axios";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import NProgress from "nprogress";
 import { Provider as ReduxProvider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -14,6 +14,7 @@ import AuthPopup from "../components/Auth";
 import RouteGuard from "../components/RouteGuard";
 import currentTheme, { Theme } from "../theme";
 import { Config } from "../utils";
+import "./global.css";
 
 axios.defaults.baseURL = Config.API_URL;
 axios.defaults.withCredentials = true;
@@ -22,6 +23,9 @@ const NextApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps<{ dehydratedState: unknown }>) => {
+  const router = useRouter();
+
+  const query = router.query;
   const [theme, setTheme] = useState<Theme>(null);
   const queryClientRef = useRef(null);
   if (!queryClientRef.current) {
@@ -58,7 +62,7 @@ const NextApp: FC<AppProps> = ({
           <ReduxProvider store={store}>
             <ThemeProvider theme={theme || currentTheme}>
               <App setTheme={setTheme}>
-                <RouteGuard>
+                <RouteGuard query={query}>
                   <Component {...pageProps} />
                 </RouteGuard>
               </App>

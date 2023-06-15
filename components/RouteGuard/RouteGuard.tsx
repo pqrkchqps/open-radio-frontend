@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 export default RouteGuard;
 
-function RouteGuard({ children }) {
+function RouteGuard({ children, query }) {
   const authUser = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
@@ -31,6 +31,8 @@ function RouteGuard({ children }) {
   }, [authUser]);
 
   function authCheck(url: string) {
+    console.log(query);
+    console.log(router);
     // redirect to login page if accessing a private page and not logged in
     const publicPaths = ["/login"];
     const urlSplit = url.split("?");
