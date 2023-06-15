@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 export default RouteGuard;
 
-function RouteGuard({ children, query }) {
+function RouteGuard({ children }) {
   const authUser = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);

@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import type { AppProps } from "next/app";
 import axios from "axios";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import NProgress from "nprogress";
 import { Provider as ReduxProvider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -23,9 +23,6 @@ const NextApp: FC<AppProps> = ({
   Component,
   pageProps,
 }: AppProps<{ dehydratedState: unknown }>) => {
-  const router = useRouter();
-
-  const query = router.query;
   const [theme, setTheme] = useState<Theme>(null);
   const queryClientRef = useRef(null);
   if (!queryClientRef.current) {
@@ -62,7 +59,7 @@ const NextApp: FC<AppProps> = ({
           <ReduxProvider store={store}>
             <ThemeProvider theme={theme || currentTheme}>
               <App setTheme={setTheme}>
-                <RouteGuard query={query}>
+                <RouteGuard>
                   <Component {...pageProps} />
                 </RouteGuard>
               </App>
