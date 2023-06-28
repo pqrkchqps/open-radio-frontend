@@ -13,10 +13,14 @@ import Helper from "./Helper/Helper";
 import defaultValues from "./assets/dataSource/editor";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { AlertTypes, openAlert } from "../../store/alert";
+import { useDispatch } from "react-redux";
+import { setTimeout } from "timers";
 
 const TabEditorWithRouter = (props) => {
   const router = useRouter();
-  return <TabEditor {...props} router={router} />;
+  const dispatch = useDispatch();
+  return <TabEditor {...props} router={router} dispatch={dispatch} />;
 };
 
 class TabEditor extends Component {
@@ -54,7 +58,19 @@ class TabEditor extends Component {
             },
           });
         } else {
-          this.props.router.push("/scores");
+          this.props.dispatch(
+            openAlert({ type: AlertTypes.Error, message: res.data.msg })
+          );
+
+          setTimeout(() => {
+            this.props.dispatch(
+              openAlert({ type: AlertTypes.Info, message: "redirecting back" })
+            );
+          }, 1000);
+
+          setTimeout(() => {
+            this.props.router.back();
+          }, 2000);
         }
       });
     }
