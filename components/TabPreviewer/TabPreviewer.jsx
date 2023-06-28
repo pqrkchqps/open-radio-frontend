@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Previewer from "../TabEditor/Previewer/Previewer";
 import PinBtn from "../TabEditor/PinBtn/PinBtn";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const TabPreviewerWithRouter = (props) => {
   const router = useRouter();
@@ -15,19 +16,31 @@ class TabPreviewer extends Component {
     headerForm: {},
     // Editor content
     editorForm: {},
+    audios: [],
     isExistData: false,
   };
 
-  componentDidMount() {
-    const routeState = this.props.router.query;
+  deleteAudio = (audioId) => {
+    const updatedAudios = this.state.audios.filter(
+      (audio) => audio._id !== audioId
+    );
+    this.setState({ ...this.state, audios: updatedAudios });
+  };
 
-    if (routeState) {
+  componentDidMount() {
+    const promise = axios.get("/scores/" + this.props.scoreId);
+    promise.then((response) => {
+      let { headerForm, editorForm, audios } = response.data;
+      headerForm = JSON.parse(headerForm);
+      editorForm = JSON.parse(editorForm);
       this.setState({
-        headerForm: JSON.parse(routeState.headerForm),
-        editorForm: JSON.parse(routeState.editorForm),
+        ...this.state,
+        headerForm,
+        editorForm,
+        audios,
         isExistData: true,
       });
-    }
+    });
   }
 
   back = () => {
@@ -39,21 +52,20 @@ class TabPreviewer extends Component {
   };
 
   render() {
-    const { headerForm, editorForm, isExistData } = this.state;
+    console.log(this.state);
+    const { headerForm, editorForm, audios, isExistData } = this.state;
 
     return (
       <div className="ge-result">
         {isExistData ? (
           <div>
-            <Previewer headerForm={headerForm} editorForm={editorForm} />
-            <PinBtn
-              onClick={this.save}
-              right={30}
-              bottom={210}
-              bgColor="#909399"
-            >
-              Save
-            </PinBtn>
+            <Previewer
+              headerForm={headerForm}
+              editorForm={editorForm}
+              audios={audios}
+              deleteAudio={this.deleteAudio}
+              scoreId={this.props.scoreId}
+            />
           </div>
         ) : (
           <div className="ge-result-err">No data is to preview.</div>

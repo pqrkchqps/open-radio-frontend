@@ -11,7 +11,15 @@ import "./markdown.module.css";
 
 export default class Previewer extends Component {
   render() {
-    const { headerForm, editorForm, previewerRef, isEdit } = this.props;
+    const {
+      headerForm,
+      editorForm,
+      audios,
+      deleteAudio,
+      previewerRef,
+      isEdit,
+      scoreId,
+    } = this.props;
 
     return (
       <div
@@ -23,7 +31,10 @@ export default class Previewer extends Component {
         <Header
           editorForm={editorForm}
           headerForm={headerForm}
+          audios={audios}
+          deleteAudio={deleteAudio}
           isEdit={isEdit}
+          scoreId={scoreId}
         />
         <Body editorForm={editorForm} headerForm={headerForm} />
       </div>

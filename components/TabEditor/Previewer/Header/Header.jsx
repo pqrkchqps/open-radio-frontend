@@ -8,18 +8,10 @@ import "./styles.module.css";
 import Parser from "../Body/Parser";
 import AudioPlayer from "../../AudioPlayer/AudioPlayer";
 
-const audioList = [
-  {
-    title: "A Call To The Soul",
-    src: "http://localhost:3000/a-call-to-the-soul.mp3",
-  },
-  { title: "Leva Eternity", src: "http://localhost:3000/leva-eternity.mp3" },
-  { title: "Unlock Me", src: "http://localhost:3000/unlock-me.mp3" },
-];
-
 export default class Header extends PureComponent {
   render() {
-    const { headerForm, editorForm, isEdit } = this.props;
+    const { headerForm, editorForm, audios, deleteAudio, isEdit, scoreId } =
+      this.props;
 
     // Parse meta data (Need to optimize later...)
     let metaData = Parser.parseMeta(editorForm.content);
@@ -52,7 +44,13 @@ export default class Header extends PureComponent {
             </tbody>
           </table>
         </div>
-        {!isEdit && <AudioPlayer audioList={audioList} />}
+        {!isEdit && (
+          <AudioPlayer
+            audios={audios}
+            deleteAudio={deleteAudio}
+            scoreId={scoreId}
+          />
+        )}
       </div>
     );
   }

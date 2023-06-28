@@ -9,24 +9,30 @@ import { RootState } from "../../store";
 import Score from "./Score/Score";
 import { Button } from "../ui";
 
-interface ScoresProps {
-  userId?: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface ScoresProps {}
 
-const fetchScores = async () => {
+const fetchMyScores = async () => {
   const { data } = await axios.get("/scores");
   return data;
 };
 
-const Scores: FC<ScoresProps> = ({ userId }) => {
+const fetchAllScores = async () => {
+  const { data } = await axios.get("/scores/all");
+  return data;
+};
+
+const Scores: FC<ScoresProps> = () => {
   const router = useRouter();
-  const { data: scores } = useQuery(["scores"], fetchScores);
+  const { data: myScores } = useQuery(["scores"], fetchMyScores);
+  const { data: allScores } = useQuery(["scores/all"], fetchAllScores);
 
   const openCreateNewScore = () => {
     router.push("/scores");
   };
 
-  console.log(scores);
+  console.log(myScores);
+  console.log(allScores);
   return (
     <Root>
       <Button
@@ -47,7 +53,12 @@ const Scores: FC<ScoresProps> = ({ userId }) => {
           }),
         }}
       />
-      {scores && scores.map((score) => <Score key={score._id} score={score} />)}
+      <h3>My Scores</h3>
+      {myScores &&
+        myScores.map((score) => <Score key={score._id} score={score} />)}
+      <h3>All Scores</h3>
+      {allScores &&
+        allScores.map((score) => <Score key={score._id} score={score} />)}
     </Root>
   );
 };

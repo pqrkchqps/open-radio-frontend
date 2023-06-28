@@ -90,11 +90,7 @@ class TabEditor extends Component {
   // Preview the result
   preview = () => {
     this.props.router.push({
-      pathname: "/scores/previewer",
-      query: {
-        headerForm: JSON.stringify(this.state.headerForm),
-        editorForm: JSON.stringify(this.state.editorForm),
-      },
+      pathname: "/scores/previewer/" + this.props.scoreId,
     });
   };
 
@@ -123,7 +119,6 @@ class TabEditor extends Component {
 
   render() {
     const { headerForm, editorForm, isShowHelper } = this.state;
-
     return (
       <div className="ge-home">
         {/*Header form*/}
@@ -136,6 +131,7 @@ class TabEditor extends Component {
             save={this.save}
             update={this.update}
             isSaved={!!this.props.scoreId}
+            scoreId={this.props.scoreId}
           ></HeaderForm>
         </header>
 

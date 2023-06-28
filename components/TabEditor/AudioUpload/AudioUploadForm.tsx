@@ -3,10 +3,12 @@ import { MaxAudioSize } from "../../../constants";
 import AudioUploadFileInput from "../AudioUpload/AudioUploadFileInput";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
+import axios from "axios";
 
-function AudioUploadForm() {
+function AudioUploadForm({ scoreId }) {
   const [formValues, setFormValues] = useState({ title: "", file: null });
   const [label, setLabel] = useState("Audio File");
+
   const handleAudioFile = (e) => {
     document.querySelector("#file-input").className = "";
 
@@ -43,6 +45,13 @@ function AudioUploadForm() {
 
     if (formValues.title && formValues.file) {
       console.log(formValues);
+      const formData = new FormData();
+      formData.append("title", formValues.title);
+      formData.append("file", formValues.file);
+      console.log(formData);
+      axios.patch(`/scores/${scoreId}/audios`, formData, {
+        headers: { "content-type": "multipart/form-data" },
+      });
     }
   };
   return (

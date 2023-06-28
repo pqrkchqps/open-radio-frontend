@@ -33,7 +33,7 @@ export default class HeaderForm extends Component {
   };
 
   render() {
-    const { form, preview, tips, save, update, isSaved } = this.props;
+    const { form, preview, tips, save, update, isSaved, scoreId } = this.props;
 
     return (
       <div className="ge-header-form">
@@ -65,7 +65,7 @@ export default class HeaderForm extends Component {
           />
         </form>
 
-        <AudioUploadForm />
+        <AudioUploadForm scoreId={scoreId} />
 
         <div className="ge-operation">
           <a
