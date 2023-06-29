@@ -6,7 +6,6 @@
   html {
     padding: 20px 0;
     margin: 0 auto;
-    width: 1024px;
     height: 100vh;
     box-sizing: border-box;
   }
@@ -1107,14 +1106,68 @@ textarea {
   border-radius: 10px;
   border-width: 3px;
   border-style: solid;
-  width: 250px;
-  padding: 30px;
+  width: 480px;
+  padding: 10px;
 }
 
 .audio-player-container > * {
-  padding: 10px 0px;
+  padding: 5px 10px;
+}
+
+.padding-5 {
+  padding: 5px;
+}
+
+.margin-5 {
+  margin: 5px;
+}
+
+.margin-side-5 {
+  margin: 0px 5px;
+}
+.two-digit-input {
+  width: 2em;
+}
+
+.four-digit-input {
+  width: 4em;
 }
 
 .red-border {
   border: 1px solid indianred;
+}
+
+.ge-btn {
+  margin: 2px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-start {
+  align-items: flex-start;
 }

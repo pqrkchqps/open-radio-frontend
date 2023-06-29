@@ -4,22 +4,26 @@ import PropTypes from "prop-types";
 // Import styles
 import "./styles.module.css";
 
-const config = {
-  container: {
-    startX: 1,
-    endX: 449,
-    startY: 20,
-    endY: 70,
-  },
+class TabP extends Component {
+  constructor() {
+    super();
+    this.ref = React.createRef();
+    this.state = {
+      container: {
+        startX: 1,
+        endX: 449,
+        startY: 20,
+        endY: 70,
+      },
 
-  axisOffset: {
-    y: 10,
-  },
-};
+      axisOffset: {
+        y: 10,
+      },
+    };
+  }
 
-const utils = {
   // Get delimiter indexes position
-  getDelimiterIndexes(strings) {
+  getDelimiterIndexes = (strings) => {
     const delimiterRegExp = /\|/g;
     let matchResult = {},
       delimiterIndexes = [];
@@ -34,12 +38,12 @@ const utils = {
     delimiterIndexes.shift();
 
     return delimiterIndexes;
-  },
+  };
   // Prepare vertical lines
-  getVerticalLinesData(delimiterIndexes, length) {
+  getVerticalLinesData = (delimiterIndexes, length) => {
     let indexesLen = delimiterIndexes.length,
       verticalLinesData = [],
-      container = config.container,
+      container = this.state.container,
       x = 0;
     for (let i = 0; i < indexesLen; i++) {
       x =
@@ -55,9 +59,9 @@ const utils = {
     }
 
     return verticalLinesData;
-  },
+  };
   // Get number data
-  getNumberData(strings, delimiterIndexes, config) {
+  getNumberData = (strings, delimiterIndexes, config) => {
     const numRegExp = /([\d])/g;
 
     let numberData = [],
@@ -117,9 +121,9 @@ const utils = {
     }
 
     return numberData;
-  },
+  };
   // Main parse function
-  parse(source) {
+  parse = (source) => {
     // Group each string
     let strings = source.split("\n").filter((string) => {
         return !/^[\s]*$/.test(string);
@@ -141,23 +145,30 @@ const utils = {
     );
 
     // Get the number data
-    numberData = this.getNumberData(strings, delimiterIndexes, config);
+    numberData = this.getNumberData(strings, delimiterIndexes, this.state);
 
     return {
       verticalLinesData,
       numberData,
     };
-  },
-};
+  };
 
-class TabP extends Component {
+  componentDidMount() {
+    this.setState({
+      ...this.state,
+      width: this.ref.current.parentNode.clientWidth,
+    });
+  }
+
   render() {
     const { source } = this.props;
 
-    const { verticalLinesData, numberData } = utils.parse(source);
+    const { verticalLinesData, numberData } = this.parse(source);
+    console.log(this.ref);
 
     return (
       <svg
+        ref={this.ref}
         className="ge-tabp"
         width="450"
         height="75"

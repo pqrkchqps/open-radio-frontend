@@ -15,7 +15,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { AlertTypes, openAlert } from "../../store/alert";
 import { useDispatch } from "react-redux";
-import { setTimeout } from "timers";
 
 const TabEditorWithRouter = (props) => {
   const router = useRouter();
@@ -24,136 +23,90 @@ const TabEditorWithRouter = (props) => {
 };
 
 class TabEditor extends Component {
-  state = {
-    // Basic information of this song
-    headerForm: {
-      song: "Untitled",
-      singer: "Unknown",
-      composer: "Unknown",
-      isEmbedChord: false,
-    },
-    // Editor content
-    editorForm: {
-      content: defaultValues.content,
-    },
-    // State of helper
-    isShowHelper: false,
-  };
-
-  componentDidMount() {
-    if (this.props.scoreId) {
-      const scorePromise = axios.get(`/scores/${this.props.scoreId}`);
-      scorePromise.then((res) => {
-        console.log(res);
-        if (!res.data.msg) {
-          this.setState({
-            ...this.state,
-            editorForm: {
-              ...this.state.editorForm,
-              ...JSON.parse(res.data.editorForm),
-            },
-            headerForm: {
-              ...this.state.headerForm,
-              ...JSON.parse(res.data.headerForm),
-            },
-          });
-        } else {
-          this.props.dispatch(
-            openAlert({ type: AlertTypes.Error, message: res.data.msg })
-          );
-
-          setTimeout(() => {
-            this.props.dispatch(
-              openAlert({ type: AlertTypes.Info, message: "redirecting back" })
-            );
-          }, 1000);
-
-          setTimeout(() => {
-            this.props.router.back();
-          }, 2000);
-        }
-      });
-    }
-  }
-
-  // Header form onChange Handler
-  handleHeaderForm = (headerForm) => {
-    this.setState({ headerForm });
-  };
-
-  // Editor form onChange handler
-  handleEditorForm = (content) => {
-    this.setState({
-      editorForm: {
-        ...this.state.editorForm,
-        content,
-      },
-    });
-  };
-
   // Get the previewer DOM
   getPreviewerRef = (previewer) => {
     this.previewer = previewer;
   };
 
-  // Toggle helper
-  toggleHelper = () => {
-    this.setState({
-      isShowHelper: !this.state.isShowHelper,
-    });
-  };
-
   // Preview the result
   preview = () => {
-    this.props.router.push({
-      pathname: "/scores/previewer/" + this.props.scoreId,
-    });
+    this.props.setIsPreview(true);
   };
 
   save = () => {
+    const { headerForm, editorForm } = this.props.state;
     const scorePromise = axios.post("/scores", {
-      headerForm: JSON.stringify(this.state.headerForm),
-      editorForm: JSON.stringify(this.state.editorForm),
+      headerForm: JSON.stringify(headerForm),
+      editorForm: JSON.stringify(editorForm),
     });
     scorePromise.then((response) => {
       console.log(response);
-      this.props.router.push(`/scores/${response.data._id}`);
+      if (response.data.msg) {
+        this.props.dispatch(
+          openAlert({ type: AlertTypes.Error, message: response.data.msg })
+        );
+      } else {
+        this.props.dispatch(
+          openAlert({ type: AlertTypes.Info, message: "Score Saved" })
+        );
+        this.props.router.push(`/scores/${response.data._id}`);
+      }
     });
   };
 
   update = () => {
+    const { headerForm, editorForm } = this.props.state;
     const scorePromise = axios.patch("/scores", {
-      headerForm: JSON.stringify(this.state.headerForm),
-      editorForm: JSON.stringify(this.state.editorForm),
+      headerForm: JSON.stringify(headerForm),
+      editorForm: JSON.stringify(editorForm),
       _id: this.props.scoreId,
     });
     scorePromise.then((response) => {
       console.log(response);
-      //this.props.router.push(`/scores/${response.data._id}`);
+      if (response.data.msg) {
+        this.props.dispatch(
+          openAlert({ type: AlertTypes.Error, message: response.data.msg })
+        );
+      } else {
+        this.props.dispatch(
+          openAlert({ type: AlertTypes.Info, message: "Score Updated" })
+        );
+      }
     });
   };
 
   render() {
-    const { headerForm, editorForm, isShowHelper } = this.state;
+    const { headerForm, editorForm, isShowHelper, audios, author } =
+      this.props.state;
+    const {
+      handleEditorForm,
+      handleHeaderForm,
+      toggleHelper,
+      scoreId,
+      deleteAudio,
+    } = this.props;
     return (
       <div className="ge-home">
         {/*Header form*/}
         <header>
           <HeaderForm
             form={headerForm}
-            onChange={this.handleHeaderForm}
+            onChange={handleHeaderForm}
             preview={this.preview}
-            tips={this.toggleHelper}
+            tips={toggleHelper}
             save={this.save}
             update={this.update}
-            isSaved={!!this.props.scoreId}
-            scoreId={this.props.scoreId}
+            isSaved={!!scoreId}
+            scoreId={scoreId}
+            audios={audios}
+            deleteAudio={deleteAudio}
+            author={author}
           ></HeaderForm>
         </header>
 
         {/*Editor*/}
         <div className="ge-edit-container">
-          <Editor form={editorForm} onChange={this.handleEditorForm}></Editor>
+          <Editor form={editorForm} onChange={handleEditorForm}></Editor>
 
           {/*Previewer*/}
           <Previewer
@@ -166,7 +119,7 @@ class TabEditor extends Component {
 
         {/*Helper*/}
         <div style={{ visibility: isShowHelper ? "visible" : "hidden" }}>
-          <Helper toggleHelper={this.toggleHelper} />
+          <Helper toggleHelper={toggleHelper} />
         </div>
       </div>
     );

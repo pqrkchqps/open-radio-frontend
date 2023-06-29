@@ -4,8 +4,11 @@ import AudioUploadFileInput from "../AudioUpload/AudioUploadFileInput";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 import axios from "axios";
+import { AlertTypes, openAlert } from "../../../store/alert";
+import { useDispatch } from "react-redux";
 
 function AudioUploadForm({ scoreId }) {
+  const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({ title: "", file: null });
   const [label, setLabel] = useState("Audio File");
 
@@ -19,7 +22,14 @@ function AudioUploadForm({ scoreId }) {
     if (!file.type.match(/audio-*/)) return;
 
     if (file.size >= MaxAudioSize.Audio) {
-      alert(`File size should be less than ${MaxAudioSize.Audio / 1000000}MB`);
+      dispatch(
+        openAlert({
+          type: AlertTypes.Error,
+          message: `File size should be less than ${
+            MaxAudioSize.Audio / 1000000
+          }MB`,
+        })
+      );
       return;
     }
 
@@ -49,11 +59,27 @@ function AudioUploadForm({ scoreId }) {
       formData.append("title", formValues.title);
       formData.append("file", formValues.file);
       console.log(formData);
-      axios.patch(`/scores/${scoreId}/audios`, formData, {
-        headers: { "content-type": "multipart/form-data" },
-      });
+      axios
+        .patch(`/scores/${scoreId}/audios`, formData, {
+          headers: { "content-type": "multipart/form-data" },
+        })
+        .then((response) => {
+          if (response.data.msg) {
+            dispatch(
+              openAlert({ type: AlertTypes.Error, message: response.data.msg })
+            );
+          } else {
+            dispatch(
+              openAlert({
+                type: AlertTypes.Info,
+                message: "Score Updated with Audio",
+              })
+            );
+          }
+        });
     }
   };
+
   return (
     <form>
       <div id="title-input">

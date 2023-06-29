@@ -38,29 +38,29 @@ const chordConfig = {
   },
   large: {
     container: {
-      width: 90,
-      height: 86,
-      radius: 6,
+      width: 180,
+      height: 172,
+      radius: 12,
       isShowText: true,
     },
 
     title: {
-      x: 46,
-      y: 15.333333333333332,
+      x: 92,
+      y: 30.333333333333332,
       fontSize: 13,
     },
 
     origin: {
-      x: 16,
-      y: 20,
+      x: 32,
+      y: 40,
     },
 
     axisOffset: {
-      x: 12,
-      y: 14,
+      x: 24,
+      y: 28,
     },
 
-    crossOffset: 4,
+    crossOffset: 8,
 
     textYAxisOffset: 3.5,
   },

@@ -10,8 +10,15 @@ import AudioPlayer from "../../AudioPlayer/AudioPlayer";
 
 export default class Header extends PureComponent {
   render() {
-    const { headerForm, editorForm, audios, deleteAudio, isEdit, scoreId } =
-      this.props;
+    const {
+      headerForm,
+      editorForm,
+      audios,
+      deleteAudio,
+      isEdit,
+      scoreId,
+      author,
+    } = this.props;
 
     // Parse meta data (Need to optimize later...)
     let metaData = Parser.parseMeta(editorForm.content);
@@ -49,6 +56,7 @@ export default class Header extends PureComponent {
             audios={audios}
             deleteAudio={deleteAudio}
             scoreId={scoreId}
+            author={author}
           />
         )}
       </div>

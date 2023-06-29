@@ -19,6 +19,7 @@ export default class Previewer extends Component {
       previewerRef,
       isEdit,
       scoreId,
+      author,
     } = this.props;
 
     return (
@@ -35,6 +36,7 @@ export default class Previewer extends Component {
           deleteAudio={deleteAudio}
           isEdit={isEdit}
           scoreId={scoreId}
+          author={author}
         />
         <Body editorForm={editorForm} headerForm={headerForm} />
       </div>
