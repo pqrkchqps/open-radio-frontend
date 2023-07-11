@@ -1,12 +1,12 @@
-import { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Layout from '../../components/Layout';
-import { Messages } from '../../components/Messages';
-import Seo from '../../components/Seo';
-import { Button, Spacing, Text, Container } from '../../components/ui';
-import { CommunityIcon } from '../../components/ui/icons';
-import { RootState } from '../../store';
-import { openAuthPopup, PopupType } from '../../store/auth';
+import { FC } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Layout from "../../components/Layout";
+import { Messages } from "../../components/Messages";
+import Seo from "../../components/Seo";
+import { Button, Spacing, Text, Container } from "../../components/ui";
+import { CommunityIcon } from "../../components/ui/icons";
+import { RootState } from "../../store";
+import { openAuthPopup, PopupType } from "../../store/auth";
 
 const MessagesPage: FC = () => {
   const authUser = useSelector((state: RootState) => state.auth.user);
@@ -18,7 +18,7 @@ const MessagesPage: FC = () => {
 
   if (!authUser) {
     return (
-      <Layout containerMaxWidth="md">
+      <Layout>
         <Container centered padding="lg" bgColor="white" shadow="sm">
           <CommunityIcon width="40" />
 
@@ -39,7 +39,7 @@ const MessagesPage: FC = () => {
   }
 
   return (
-    <Layout hideRightSidebar containerMaxWidth="md" marginTop="none">
+    <Layout hideRightSidebar marginTop="none">
       <Seo title="Messages" />
       <Messages />
     </Layout>

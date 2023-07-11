@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-import Button from "../Button/Button";
+import Button from "../TabEditor/Button/Button";
 import axios from "axios";
-import { AlertTypes, openAlert } from "../../../store/alert";
+import { AlertTypes, openAlert } from "../../store/alert";
 import { useDispatch, useSelector } from "react-redux";
 
 const AudioPlayer = ({ audios, scoreId, deleteAudio, author }) => {

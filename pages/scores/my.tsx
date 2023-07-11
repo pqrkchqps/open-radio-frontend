@@ -11,10 +11,9 @@ const MyScoresPage: FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <Layout hideRightSidebar containerMaxWidth="md">
-      <Container shadow="sm" bgColor="white" maxWidth="lg">
-        <Seo title="Your Scores" />
-
+    <Layout>
+      <Container shadow="sm" bgColor="white">
+        <Seo title="Scores" />
         <Scores />
       </Container>
     </Layout>

@@ -1,6 +1,6 @@
-import { FC } from 'react';
-import ResetPassword from '../../components/Auth/ResetPassword';
-import Seo from '../../components/Seo';
+import { FC } from "react";
+import ResetPassword from "../../components/Auth/ResetPassword";
+import Seo from "../../components/Seo";
 
 const ResetPasswordPage: FC = () => {
   return (

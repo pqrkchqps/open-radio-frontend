@@ -1,7 +1,7 @@
-import React, { FC, ReactNode } from 'react';
-import { Root } from './style';
-import { EmptyIcon } from '../icons';
-import Spacing from '../Spacing';
+import React, { FC, ReactNode } from "react";
+import { Root } from "./style";
+import { EmptyIcon } from "../icons";
+import Spacing from "../Spacing";
 
 interface EmptyProps {
   children: ReactNode;

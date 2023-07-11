@@ -1,14 +1,14 @@
-import React, { FC, Fragment } from 'react';
-import axios from 'axios';
-import Layout from '../../components/Layout';
-import { Wrapper } from '../../components/Members/style';
-import MembersCard from '../../components/Members/MembersCard';
-import { useInfiniteScroll } from '../../utils';
-import { DataLimit } from '../../constants';
-import { LoadingDots, Container, Empty, Skeleton } from '../../components/ui';
-import Seo from '../../components/Seo';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import React, { FC, Fragment } from "react";
+import axios from "axios";
+import Layout from "../../components/Layout";
+import { Wrapper } from "../../components/Members/style";
+import MembersCard from "../../components/Members/MembersCard";
+import { useInfiniteScroll } from "../../utils";
+import { DataLimit } from "../../constants";
+import { LoadingDots, Container, Empty, Skeleton } from "../../components/ui";
+import Seo from "../../components/Seo";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const fetchUsers = async ({ queryKey, pageParam = 0 }) => {
   const [, isEmailVerificationRequired] = queryKey;
@@ -19,9 +19,11 @@ const fetchUsers = async ({ queryKey, pageParam = 0 }) => {
 };
 
 const MembersPage: FC = () => {
-  const { isEmailVerificationRequired } = useSelector((state: RootState) => state.settings);
+  const { isEmailVerificationRequired } = useSelector(
+    (state: RootState) => state.settings
+  );
   const { data, isFetching, isFetchingNextPage } = useInfiniteScroll({
-    key: ['members', isEmailVerificationRequired],
+    key: ["members", isEmailVerificationRequired],
     apiCall: fetchUsers,
     dataLimit: DataLimit.Members,
   });
@@ -40,7 +42,7 @@ const MembersPage: FC = () => {
 
   if (isEmpty) {
     return (
-      <Layout hideRightSidebar containerMaxWidth="md">
+      <Layout hideRightSidebar>
         <Container centered padding="lg">
           <Empty>
             <div>No community members yet.</div>
@@ -51,14 +53,18 @@ const MembersPage: FC = () => {
   }
 
   return (
-    <Layout hideRightSidebar containerMaxWidth="md">
+    <Layout hideRightSidebar>
       <Seo title="Members" />
       <Wrapper>
         {data?.pages?.map((users, i) => {
           return (
             <Fragment key={i}>
               {users?.map((user: any) => (
-                <MembersCard key={user._id} queryKey={['members']} user={user} />
+                <MembersCard
+                  key={user._id}
+                  queryKey={["members"]}
+                  user={user}
+                />
               ))}
             </Fragment>
           );

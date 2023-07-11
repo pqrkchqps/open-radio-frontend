@@ -66,7 +66,7 @@ const Layout: FC<LayoutProps> = ({
 Layout.defaultProps = {
   hideLeftSidebar: false,
   hideRightSidebar: false,
-  containerMaxWidth: "sm",
+  containerMaxWidth: "xxxl",
   marginTop: "md",
 };
 

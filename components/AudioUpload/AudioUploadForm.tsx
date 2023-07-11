@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { MaxAudioSize } from "../../../constants";
+import { MaxAudioSize } from "../../constants";
 import AudioUploadFileInput from "../AudioUpload/AudioUploadFileInput";
-import Input from "../Input/Input";
-import Button from "../Button/Button";
+import Input from "../TabEditor/Input/Input";
+import Button from "../TabEditor/Button/Button";
 import axios from "axios";
-import { AlertTypes, openAlert } from "../../../store/alert";
+import { AlertTypes, openAlert } from "../../store/alert";
 import { useDispatch } from "react-redux";
 
-function AudioUploadForm({ scoreId }) {
+function AudioUploadForm({ scoreId, uploadRoute }) {
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({ title: "", file: null });
   const [label, setLabel] = useState("Audio File");
@@ -55,33 +55,36 @@ function AudioUploadForm({ scoreId }) {
 
     if (formValues.title && formValues.file) {
       console.log(formValues);
+
       const formData = new FormData();
       formData.append("title", formValues.title);
       formData.append("file", formValues.file);
       console.log(formData);
-      axios
-        .patch(`/scores/${scoreId}/audios`, formData, {
-          headers: { "content-type": "multipart/form-data" },
-        })
-        .then((response) => {
-          if (response.data.msg) {
-            dispatch(
-              openAlert({ type: AlertTypes.Error, message: response.data.msg })
-            );
-          } else {
-            dispatch(
-              openAlert({
-                type: AlertTypes.Info,
-                message: "Score Updated with Audio",
-              })
-            );
-          }
-        });
+
+      const route = uploadRoute ? uploadRoute : `/scores/${scoreId}/audios`;
+      const method = uploadRoute ? "post" : "patch";
+
+      axios[method](route, formData, {
+        headers: { "content-type": "multipart/form-data" },
+      }).then((response) => {
+        if (response.data.msg) {
+          dispatch(
+            openAlert({ type: AlertTypes.Error, message: response.data.msg })
+          );
+        } else {
+          dispatch(
+            openAlert({
+              type: AlertTypes.Info,
+              message: "Score Updated with Audio",
+            })
+          );
+        }
+      });
     }
   };
 
   return (
-    <form>
+    <form className="audio-upload-form">
       <div id="title-input">
         <Input
           name="title"

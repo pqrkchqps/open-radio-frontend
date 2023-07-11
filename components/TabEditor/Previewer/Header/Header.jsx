@@ -6,7 +6,7 @@ import "./styles.module.css";
 
 // Import Parser
 import Parser from "../Body/Parser";
-import AudioPlayer from "../../AudioPlayer/AudioPlayer";
+import AudioPlayer from "../../../AudioPlayer/AudioPlayer";
 
 export default class Header extends PureComponent {
   render() {

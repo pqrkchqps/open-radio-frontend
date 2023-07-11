@@ -12,8 +12,8 @@ import { checkedIcon, uncheckedIcon } from "./SwitchIcon";
 // Import custom styles
 import "./styles.module.css";
 import styles from "./styles.js";
-import AudioUploadForm from "../AudioUpload/AudioUploadForm";
-import AudioPlayer from "../AudioPlayer/AudioPlayer";
+import AudioUploadForm from "../../AudioUpload/AudioUploadForm";
+import AudioPlayer from "../../AudioPlayer/AudioPlayer";
 
 export default class HeaderForm extends Component {
   // Input handler

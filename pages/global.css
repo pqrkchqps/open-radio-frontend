@@ -4,7 +4,6 @@
 
 @media (min-width: 1024px) {
   html {
-    padding: 20px 0;
     margin: 0 auto;
     height: 100vh;
     box-sizing: border-box;
@@ -1170,4 +1169,15 @@ textarea {
 
 .align-start {
   align-items: flex-start;
+}
+
+#top-sequencer-controls {
+  margin: 8px;
+  display: grid;
+  grid-template-columns: 250px auto;
+}
+
+#top-sequencer-controls .audio-upload-form {
+  margin: auto;
+  width: 205px;
 }
