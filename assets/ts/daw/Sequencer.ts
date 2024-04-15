@@ -104,7 +104,7 @@ class Sequencer {
 
   getUserMedia = () => {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((micStream) => {
-      this.audioSongData.setStream(micStream);
+      this.audioSongData.setMicStream(micStream);
     });
   };
 }
