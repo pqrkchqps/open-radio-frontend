@@ -1,6 +1,6 @@
-import { AudioMessage }  from './AudioMessage.ts';
+import { AudioMessage } from "./AudioMessage";
 
-export { AudioMessages }
+export { AudioMessages };
 
 class AudioMessages {
   private audioMessages;
@@ -14,11 +14,15 @@ class AudioMessages {
   }
 
   resetTempo() {
-    this.audioMessages.forEach((audioMessage, position) => this.createAudioMessage(position));
+    this.audioMessages.forEach((audioMessage, position) =>
+      this.createAudioMessage(position)
+    );
   }
   createAudioMessage(position) {
     // duration (in sec) is the smallest amount of time a loop can play for
-    const duration = 60 / (this.guiSongData.getTempo() * this.guiSongData.getDivisionsOfBeat());
+    const duration =
+      60 /
+      (this.guiSongData.getTempo() * this.guiSongData.getDivisionsOfBeat());
 
     // when (in sec) is the time from when play is pressed to when the audio is heard
     const when = duration * position;
